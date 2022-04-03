@@ -13,4 +13,6 @@ brew install dart
 ```
 dart --version
 ```
+编辑器选择 `vscode` ，`vscode` 插件选择`Dart` 和  `Code Runner`。
+
 如果您的系统是 `window` ，可以去 [Dart](https://dart.dev/get-dart) 官网查看具体步骤。
