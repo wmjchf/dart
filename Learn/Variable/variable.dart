@@ -1,5 +1,4 @@
-
-void main(){
+void main() {
   // 整型
   int a = 10;
   print(a);
@@ -21,18 +20,17 @@ void main(){
   // 任意类型，可以把任意值赋给它
   dynamic e = 13;
   print(e);
+  // 超类Object
+  Object m = "hello word";
+  m = f;
+  print(m);
   // const常量
-  const g = 12;
-   print(g);
+  const int g = 12;
+  print(g);
   // 下面代码报错，const是（编译时类型)
   //const i = DateTime.now();
- 
-  // final常量 (运行时常量)
-  final h = DateTime.now();
-  print(h);
 
-  
-  
-  
-  
+  // final常量 (运行时常量)
+  final DateTime h = DateTime.now();
+  print(h);
 }
