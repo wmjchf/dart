@@ -157,4 +157,6 @@ void main(List<String> args) {
   print(str1);
 }
 ```
+<img width="437" alt="截屏2022-04-09 下午11 45 05" src="https://user-images.githubusercontent.com/36124772/162581564-93d3f8ff-a433-40fe-af8f-2e39888be617.png">
+
 直接可以打印出表情，有表情需求的可以直接使用Runes。
