@@ -26,11 +26,13 @@ void main() {
   print(m);
   // const常量
   const int g = 12;
+  // g = 12;
   print(g);
   // 下面代码报错，const是（编译时类型)
   //const i = DateTime.now();
 
   // final常量 (运行时常量)
   final DateTime h = DateTime.now();
+  // h = DateTime.now();
   print(h);
 }
