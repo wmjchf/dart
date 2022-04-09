@@ -21,6 +21,7 @@ void main() {
   list.add("world");
   list.add(23);
   list[0] = "奥特曼";
+
   print("------List------");
   print(list);
   print(list.runtimeType);
