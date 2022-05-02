@@ -75,7 +75,7 @@ class Person {
 }
 ```
 
-#### 命名构造函数
+##### 命名构造函数
 
 Dart 类中两个同名构造方法不能重载，但是 Dart 语言为类新增了一种`命名构造`。
 
@@ -104,7 +104,7 @@ class Person {
 }
 ```
 
-#### 常量构造方法
+##### 常量构造方法
 
 不会在内存中重复创建，节省开销。
 
@@ -125,7 +125,7 @@ class Point {
 }
 ```
 
-#### 工厂构造方法
+##### 工厂构造方法
 
 使用 factory 关键字标识类的构造函数将会令该构造函数变为工厂构造函数。`工厂构造函数不会自动生成实例,而是通过代码来决定返回的实例对象；工厂构造函数类似于 static 静态成员，无法访问 this 指针`。
 
@@ -149,4 +149,244 @@ class Phone {
     return Phone._cache;
   }
 }
+```
+
+##### 构造函数重定向
+
+有时候一个构造方法会调动类中的其他构造方法来实例化，这时候可以使用构造方法重定向。
+
+```
+void main(List<String> args) {
+  Person person = new Person.withAge(12);
+  print("${person.age} ${person.name}");
+}
+
+class Person {
+  int? age;
+
+  String? name;
+
+  Person(String name, int age) {
+    this.name = name;
+    if (age < 0) {
+      this.age = 0;
+    } else {
+      this.age = age;
+    }
+  }
+
+  Person.withAge(int age) : this("", age);
+}
+
+```
+
+#### 访问修饰符和 getter、setter
+
+Dart 中没有像别的语言一样的修饰符例如 public，private.... ，也就是说，成员默认都是 public 的，如果需要在 Dart 中将一个属性或者方法定义成私有，需要在前面加`-`。
+（需要注意的是，定义为私有属性和私有方法的类必须要抽离放在一个单独的文件中，然后才能真正起到私有的效果。）
+
+```
+// Person.dart
+class Person {
+  int _cardId;
+
+  Person(this._cardId);
+
+  int get cardId {
+    return _cardId;
+  }
+
+  set cardId(int newValue) {
+    this._cardId = newValue;
+  }
+}
+// 访问修饰符.dart
+import 'Person.dart';
+
+void main(List<String> args) {
+  Person p = new Person(0);
+  print(p.cardId);
+}
+```
+
+### 类的复用与抽象
+
+#### 继承
+
+在 Dart 中，使用 extens 继承一个类，子类会继承除了构造方法以外的属性和方法，dart 是单继承。
+
+```
+// 父类 Person.dart
+class Person {
+  int _cardId;
+
+  Person(this._cardId);
+
+  int get cardId {
+    return _cardId;
+  }
+
+  set cardId(int newValue) {
+    this._cardId = newValue;
+  }
+
+  void eat() {
+    print("我是Person,我要吃饭，我饿！");
+  }
+}
+
+// 子类 继承.dart
+import 'Person.dart';
+
+void main(List<String> args) {
+  Student student = new Student(0);
+  print(student.cardId);
+  student.eat();
+}
+
+class Student extends Person {
+  Student(int cardId) : super(cardId);
+
+  @override
+  void eat() {
+    super.eat();
+    print("我是Student, 我要吃饭");
+  }
+}
+```
+
+#### 抽象类
+
+Dart 语言没有提供 interface 关键字来定义接口，但是 Dart 语言中保留了抽象类，抽象类使用 abstract 关键字来修饰，抽象类是不能被实例化的，子类继承抽象类时，必须实现全部抽象方法。
+
+```
+void main(List<String> args) {
+  Bird bird = new Bird();
+  Dog dog = new Dog();
+
+  bird.showInformation();
+  dog.showInformation();
+}
+
+abstract class Animation {
+  void born() {
+    print("我出生了啊！");
+  }
+
+  void showInformation();
+}
+
+class Bird extends Animation {
+  @override
+  void showInformation() {
+    print("我是一只小小鸟");
+    born();
+  }
+}
+
+class Dog extends Animation {
+  @override
+  void showInformation() {
+    print("我是一只可爱的狗狗");
+    born();
+  }
+}
+
+```
+
+#### 隐式接口
+
+实际上在 Dart 中，每个类都隐式的定义了一个包含所有实例成员的接口， 并且该类实现了这个接口。因此，如果我们想实现某个接口，但有又不想继承，则可以使用这种隐式接口机制。我们需要用到关键字 implements。
+
+```
+void main(List<String> args) {
+  Dog dog = new Dog();
+  dog.run();
+  dog.showInformation();
+  Run dog1 = new Dog();
+  dog1.run();
+}
+
+abstract class Animation {
+  void born() {
+    print("我出生了啊！");
+  }
+
+  void showInformation();
+}
+
+class Run {
+  void run() {
+    print("我正在跑！");
+  }
+}
+
+class Dog extends Animation implements Run {
+  @override
+  void run() {
+    print("Dog正在奔跑");
+  }
+
+  @override
+  void showInformation() {
+    print("我是一只可爱的小狗狗");
+  }
+}
+
+```
+
+#### 混入
+
+mixins 是要通过非继承的方式来复用类中的代码。
+
+```
+void main(List<String> args) {
+  Bird bird = new Bird();
+  Dog dog = new Dog();
+  bird.showInformation();
+  dog.showInformation();
+  dog.run();
+  bird.fly();
+}
+
+abstract class Animation {
+  void showInformation();
+}
+
+mixin Run {
+  void run() {
+    print("我正在跑！");
+  }
+}
+
+mixin Fly {
+  void fly() {
+    print("我正在飞");
+  }
+}
+
+class Bird extends Animation with Fly {
+  @override
+  void fly() {
+    super.fly();
+  }
+
+  @override
+  void showInformation() {
+    print("我是一只小小鸟");
+  }
+}
+
+class Dog extends Animation with Run {
+  @override
+  void showInformation() {
+    print("我是一只可爱的狗狗");
+  }
+
+  @override
+  void run() {
+    super.run();
+  }
+}
+
 ```
