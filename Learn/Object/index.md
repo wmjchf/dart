@@ -390,3 +390,84 @@ class Dog extends Animation with Run {
 }
 
 ```
+
+### 泛型
+
+泛型作用 : 为 类 , 接口 , 方法 提供复用性 , 支持类型不确定的数据类型 。
+
+#### 泛型类
+
+```
+void main(List<String> args) {
+  Cache cacheStr = new Cache<String>("122");
+  print(cacheStr.value);
+  Cache cacheInt = new Cache<int>(122);
+  print(cacheInt.value);
+}
+
+class Cache<T> {
+  T _value;
+
+  Cache(this._value);
+
+  T get value {
+    return _value;
+  }
+
+  set value(T v) {
+    this._value = v;
+  }
+}
+```
+
+#### 泛型方法
+
+```
+void main(List<String> args) {
+  String messageStr = showMessage<String>("122");
+  int messageInt = showMessage<int>(12);
+}
+T showMessage<T>(T message) {
+  return message;
+}
+```
+
+如果未使用泛型，根据设置不同类型的值，会产生大量重复代码。
+
+#### 限制参数类型
+
+在实现泛型类型时，希望限制其参数的类型。则可以使用 extends。
+
+```
+void main(List<String> args) {
+  // 如果不是Cache的子类，报错
+  CacheDog cd = new CacheDog();
+  Cache cacheDog = new Cache<CacheDog>(cd);
+  print(cacheDog.value);
+}
+class Animaton {
+  void born() {
+    print("我出生了！");
+  }
+}
+
+class Cache<T extends Animaton> {
+  T _value;
+
+  Cache(this._value);
+
+  T get value {
+    return _value;
+  }
+
+  set value(T v) {
+    this._value = v;
+  }
+}
+
+class CacheDog extends Animaton {
+  void showMessage() {
+    print("我是一只可爱的小狗狗");
+  }
+}
+```
