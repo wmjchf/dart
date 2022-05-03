@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import '../Object/泛型.dart';
-
 void main(List<String> args) {
   print("开始执行");
   // scheduleMicrotask(showMessage);

@@ -95,5 +95,66 @@ void showInformation() {
 }
 
 ```
+
 <img width="520" alt="截屏2022-05-03 上午11 04 15" src="https://user-images.githubusercontent.com/36124772/166400105-ddf16e7e-0a77-44f3-b1bc-f87b3b81d480.png">
 
+# Future
+
+Future 类是对未来结果的一个代理。
+
+```
+void main(List<String> args) {
+  print("开始执行");
+  Future f1 = new Future(() {
+    print("第一个future");
+    return 1;
+  });
+  f1.then((res) {
+    print("第二个future");
+    print(res);
+    return 2;
+  }).then((res) {
+    print("第三个future");
+    print(res);
+  });
+  print("结束执行");
+}
+```
+
+# async 和 await
+
+在 Dart1.9 中加入了 async 和 await 关键字，有了这两个关键字，我们可以更简洁的编写异步代码，而不需要调用 Future 相关的 API。将 async 关键字作为方法声明的后缀时，具有如下意义：
+
+- 被修饰的方法会将一个 Future 对象作为返回值。
+- 该方法会同步执行其中的方法的代码直到第一个 await 关键字，然后它暂停该方法其他部分的执行；
+- 一旦由 await 关键字引用的 Future 任务执行完成，await 的下一行代码将立即执行。
+
+```
+void main(List<String> args) {
+  print("main执行开始");
+  testAsync();
+  print("main执行结束");
+}
+
+Future<int> f1Future() {
+  return new Future(() {
+    return 1;
+  });
+}
+
+Future<int> f2Future() {
+  return new Future(() {
+    return 2;
+  });
+}
+
+void testAsync() async {
+  print("testAsync执行开始");
+  int date1 = await f1Future();
+  int date2 = await f2Future();
+  print(date1);
+  print(date2);
+  print("testAsync执行结束");
+}
+
+```
