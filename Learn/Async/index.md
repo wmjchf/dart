@@ -120,6 +120,8 @@ void main(List<String> args) {
   print("结束执行");
 }
 ```
+<img width="503" alt="截屏2022-05-03 上午11 33 51" src="https://user-images.githubusercontent.com/36124772/166402266-3e6681d7-24f4-40fe-be02-05e9bbb3559a.png">
+
 
 # async 和 await
 
@@ -158,3 +160,5 @@ void testAsync() async {
 }
 
 ```
+<img width="535" alt="截屏2022-05-03 上午11 42 09" src="https://user-images.githubusercontent.com/36124772/166402275-c05f3af8-a5ff-4d41-b7a1-391f0e3a91ff.png">
+
