@@ -120,8 +120,8 @@ void main(List<String> args) {
   print("结束执行");
 }
 ```
-<img width="503" alt="截屏2022-05-03 上午11 33 51" src="https://user-images.githubusercontent.com/36124772/166402266-3e6681d7-24f4-40fe-be02-05e9bbb3559a.png">
 
+<img width="503" alt="截屏2022-05-03 上午11 33 51" src="https://user-images.githubusercontent.com/36124772/166402266-3e6681d7-24f4-40fe-be02-05e9bbb3559a.png">
 
 # async 和 await
 
@@ -160,5 +160,97 @@ void testAsync() async {
 }
 
 ```
+
 <img width="535" alt="截屏2022-05-03 上午11 42 09" src="https://user-images.githubusercontent.com/36124772/166402275-c05f3af8-a5ff-4d41-b7a1-391f0e3a91ff.png">
 
+# Stream
+
+Stream 是一系列异步事件的序列，可以理解成一个异步的 Iterable，不同的是当你向 Iterable 获取下一个事件时它会立即给你，但 Stream 则不会立即给你，而是在它准备好时告诉你。刚好符合异步任务的特点，我们不知道异步任务什么时候完成（不知道什么时候用 Future 包裹异步任务的的结果），stream 能够很好的帮我们完成。
+
+在 Dart 语言中，Stream 有两种类型，一种是点对点的单订阅流（Single-subscription），另一种则是广播流。
+
+## 单订阅流
+
+单订阅流的特点是只允许存在一个监听器，即使该监听器被取消后，也不允许再次注册监听器。
+
+```
+void main(List<String> args) {
+  print("main开始执行");
+  Future<int> f1 = new Future(() {
+    return 1;
+  });
+  Future<int> f2 = new Future(() {
+    return 2;
+  });
+  // 创建一个stream
+  Stream<int> stream = Stream.fromFutures([f1, f2]);
+  // 监听stream
+  stream.listen((date) {
+    print(date);
+  });
+  print("main结束执行");
+}
+
+```
+
+## 广播流
+
+在普通的单订阅流中调用两次 listen 会报错。
+
+```
+void main(List<String> args) {
+  print("main开始执行");
+  Future<int> f1 = new Future(() {
+    return 1;
+  });
+  Future<int> f2 = new Future(() {
+    return 2;
+  });
+  Stream<int> stream = Stream.fromFutures([f1, f2]).asBroadcastStream();
+
+  stream.listen((date) {
+    print(date);
+  });
+  stream.listen((date) {
+    print(date);
+  });
+  print("main结束执行");
+}
+
+```
+
+## StreamController
+
+Stream 的一个帮助类，可用于整个 Stream 过程的控制。
+
+```
+import 'dart:async';
+
+void main(List<String> args) {
+  StreamController streamController = new StreamController(onListen: () {
+    print("onListen");
+  }, onPause: () {
+    print("onPause");
+  }, onResume: () {
+    print("onResume");
+  }, onCancel: () {
+    print("onCancel");
+  });
+  StreamSubscription streamSubscription =
+      streamController.stream.listen((date) {
+    print(date);
+  }, onDone: () {
+    print("onDone");
+  }, onError: (error) {
+    print(error);
+  });
+  streamController.add(1);
+  streamSubscription.pause();
+  streamSubscription.resume();
+  streamController.add(2);
+  streamController.addError("error");
+  streamController.add(3);
+  streamController.close(); // onDone会执行
+}
+
+```
